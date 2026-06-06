@@ -39,7 +39,7 @@ This isn't set in stone — the stack may change depending on what direction thi
 
 ## Route Data
 
-GRT publishes open transit data in GTFS format (routes, stops, schedules), available free from the [Region of Waterloo Open Data portal](https://www.regionofwaterloo.ca/en/living-here/grt-open-data.aspx).
+GRT publishes open transit data in GTFS format (routes, stops, schedules), available free from the [Region of Waterloo Open Data portal](https://www.grt.ca/about-grt/open-data/).
 
 ---
 
