@@ -1,6 +1,6 @@
 # GRT Stop Request App
 
-A web app concept that lets passengers on Grand River Transit (GRT) buses digitally request a stop — an alternative to the physical button when it's broken or unavailable.
+A web app concept that lets passengers on Grand River Transit (GRT) buses digitally request a stop an alternative to the physical button when it's broken or unavailable.
 
 This is a work in progress and the approach may change as the project develops.
 
@@ -18,7 +18,7 @@ A lot of GRT buses in Kitchener-Waterloo have unreliable stop-request buttons. T
 - Taps a button to request their stop
 - The request shows up on a driver-facing screen in real time
 
-The exact implementation is still being figured out — this repo is for exploring the concept.
+The exact implementation is still being figured out this repo is for exploring the concept.
 
 ---
 
@@ -33,7 +33,7 @@ One option that seems realistic for a prototype:
 | Notifications | Firebase Cloud Messaging |
 | Route data | GRT GTFS open data |
 
-This isn't set in stone — the stack may change depending on what direction things go.
+This isn't set in stone the stack may change depending on what direction things go.
 
 ---
 
@@ -45,7 +45,7 @@ GRT publishes open transit data in GTFS format (routes, stops, schedules), avail
 
 ## Status
 
-Early stage / proof of concept. Nothing is finalized yet — this is being built to explore the idea and potentially demo to GRT.
+Early stage / proof of concept. Nothing is finalized yet this is being built to explore the idea and potentially demo to GRT.
 
 ---
 
