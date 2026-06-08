@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GRT Driver Dashboard</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg: #0a0a0a; --surface: #141414; --surface2: #1e1e1e;
+    --border: #2a2a2a; --text: #f0f0f0; --text-muted: #777;
+    --green: #00b050; --green-dim: rgba(0,176,80,0.12);
+    --alert: #ff9500; --alert-dim: rgba(255,149,0,0.12);
+    --alert-glow: rgba(255,149,0,0.4);
+    --radius: 14px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg); color: var(--text);
+    min-height: 100vh;
+  }
+
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .header-left { display: flex; align-items: center; gap: 12px; }
+  .logo { width: 36px; height: 36px; background: var(--green); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; color: #000; flex-shrink: 0; }
+  header h1 { font-size: 17px; font-weight: 600; letter-spacing: -0.3px; }
+  header p { font-size: 12px; color: var(--text-muted); margin-top: 1px; }
+
+  .conn-badge {
+    font-size: 12px; font-weight: 500;
+    padding: 5px 12px; border-radius: 20px;
+    display: flex; align-items: center; gap: 6px;
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+  .conn-badge.connected { border-color: var(--green); color: var(--green); background: var(--green-dim); }
+  .conn-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+  .conn-badge.connected .conn-dot { animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+  .main { max-width: 680px; margin: 0 auto; padding: 28px 20px; display: flex; flex-direction: column; gap: 24px; }
+
+  /* Alert banner */
+  .alert-banner {
+    display: none;
+    background: var(--alert-dim);
+    border: 2px solid var(--alert);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    flex-direction: column; gap: 6px;
+    animation: flashBorder 1s ease-in-out 3;
+  }
+  .alert-banner.visible { display: flex; }
+  @keyframes flashBorder {
+    0%,100% { box-shadow: none; }
+    50% { box-shadow: 0 0 32px var(--alert-glow); }
+  }
+  .alert-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--alert); }
+  .alert-stop { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; color: var(--text); margin-top: 2px; }
+  .alert-cross { font-size: 15px; color: var(--text-muted); margin-top: 2px; }
+  .alert-meta { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+  .alert-chip {
+    font-size: 12px; font-weight: 500;
+    padding: 4px 10px; border-radius: 6px;
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+  }
+  .alert-chip.route { border-color: var(--green); color: var(--green); background: var(--green-dim); }
+  .ack-btn {
+    margin-top: 14px;
+    width: 100%;
+    background: var(--alert);
+    color: #000;
+    border: none;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px; font-weight: 700;
+    padding: 14px;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .ack-btn:hover { opacity: 0.85; }
+
+  /* Stats row */
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
+  .stat-value { font-size: 28px; font-weight: 700; letter-spacing: -1px; }
+  .stat-label { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+  .stat-card.active .stat-value { color: var(--alert); }
+
+  /* Queue */
+  .section-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; }
+
+  .queue { display: flex; flex-direction: column; gap: 8px; }
+
+  .queue-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    transition: opacity 0.3s;
+  }
+  .queue-item.new {
+    border-color: var(--alert);
+    background: var(--alert-dim);
+    animation: slideIn 0.25s ease-out;
+  }
+  @keyframes slideIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+  .queue-item.acked { opacity: 0.4; }
+  .q-stop { font-size: 15px; font-weight: 600; }
+  .q-cross { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .q-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .q-id { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); background: var(--surface2); padding: 3px 7px; border-radius: 5px; }
+  .q-time { font-size: 11px; color: var(--text-muted); }
+  .q-ack { background: transparent; border: 1px solid var(--border); color: var(--text-muted); border-radius: 6px; font-family: 'DM Sans', sans-serif; font-size: 12px; padding: 4px 10px; cursor: pointer; transition: border-color 0.15s, color 0.15s; }
+  .q-ack:hover { border-color: var(--green); color: var(--green); }
+
+  .empty-queue { text-align: center; padding: 40px 0; font-size: 14px; color: var(--text-muted); border: 1px dashed var(--border); border-radius: var(--radius); }
+
+  .clear-btn { background: transparent; border: 1px solid var(--border); color: var(--text-muted); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 13px; padding: 7px 14px; cursor: pointer; transition: border-color 0.15s; }
+  .clear-btn:hover { border-color: #ff6b6b; color: #ff6b6b; }
+
+  .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <div class="logo">GRT</div>
+    <div>
+      <h1>Driver Dashboard</h1>
+      <p>Incoming stop requests</p>
+    </div>
+  </div>
+  <div class="conn-badge" id="connBadge">
+    <span class="conn-dot"></span>
+    <span id="connText">Connecting...</span>
+  </div>
+</header>
+
+<div class="main">
+
+  <!-- Alert banner (latest unacked request) -->
+  <div class="alert-banner" id="alertBanner">
+    <div class="alert-label">Stop Requested</div>
+    <div class="alert-stop" id="alertStop"></div>
+    <div class="alert-cross" id="alertCross"></div>
+    <div class="alert-meta" id="alertMeta"></div>
+    <button class="ack-btn" onclick="ackLatest()">Acknowledge</button>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat-card active">
+      <div class="stat-value" id="statPending">0</div>
+      <div class="stat-label">Pending</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="statTotal">0</div>
+      <div class="stat-label">Total today</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="statAcked">0</div>
+      <div class="stat-label">Acknowledged</div>
+    </div>
+  </div>
+
+  <!-- Queue -->
+  <div>
+    <div class="section-header">
+      <div class="section-label" style="margin:0">Request Queue</div>
+      <button class="clear-btn" onclick="clearAcked()">Clear acknowledged</button>
+    </div>
+    <div class="queue" id="queue">
+      <div class="empty-queue">No stop requests yet.<br>Waiting for passengers...</div>
+    </div>
+  </div>
+
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, onChildAdded, update, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDbCCJwN8GN3SG9J50GGxo1oqHVydTdpOQ",
+  authDomain: "grt-route-74a86.firebaseapp.com",
+  databaseURL: "https://grt-route-74a86-default-rtdb.firebaseio.com",
+  projectId: "grt-route-74a86",
+  storageBucket: "grt-route-74a86.firebasestorage.app",
+  messagingSenderId: "587216235730",
+  appId: "1:587216235730:web:d91e46ef14b8e9ce5a910b"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const connBadge = document.getElementById('connBadge');
+const connText = document.getElementById('connText');
+
+// Connection state
+const connectedRef = ref(db, '.info/connected');
+onValue(connectedRef, snap => {
+  if (snap.val()) {
+    connBadge.className = 'conn-badge connected';
+    connText.textContent = 'Live';
+  } else {
+    connBadge.className = 'conn-badge';
+    connText.textContent = 'Reconnecting...';
+  }
+});
+
+let requests = {}; // key -> request object
+let latestUnackedKey = null;
+
+const alertBanner = document.getElementById('alertBanner');
+const beep = () => {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.frequency.value = 880;
+    o.type = 'sine';
+    g.gain.setValueAtTime(0.3, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+    o.start(); o.stop(ctx.currentTime + 0.4);
+  } catch(e) {}
+};
+
+onChildAdded(ref(db, 'stopRequests'), snap => {
+  const key = snap.key;
+  const data = snap.val();
+  if (requests[key]) return; // already have it
+
+  requests[key] = { key, ...data, acked: data.acked || false };
+  renderAll();
+
+  if (!data.acked) {
+    beep();
+    showAlert(key);
+  }
+});
+
+function showAlert(key) {
+  const r = requests[key];
+  if (!r || r.acked) return;
+  latestUnackedKey = key;
+  document.getElementById('alertStop').textContent = r.street;
+  document.getElementById('alertCross').textContent = 'at ' + r.crossStreet + (r.municipality ? ' · ' + r.municipality : '');
+  const meta = document.getElementById('alertMeta');
+  meta.innerHTML = '';
+  if (r.route) {
+    const chip = document.createElement('span');
+    chip.className = 'alert-chip route';
+    chip.textContent = 'Route ' + r.route;
+    meta.appendChild(chip);
+  }
+  const idChip = document.createElement('span');
+  idChip.className = 'alert-chip';
+  idChip.textContent = 'Stop #' + r.stopId;
+  meta.appendChild(idChip);
+  const timeChip = document.createElement('span');
+  timeChip.className = 'alert-chip';
+  timeChip.textContent = formatTime(r.timestamp);
+  meta.appendChild(timeChip);
+  alertBanner.className = 'alert-banner visible';
+}
+
+window.ackLatest = () => {
+  if (!latestUnackedKey) return;
+  ackRequest(latestUnackedKey);
+  alertBanner.className = 'alert-banner';
+
+  // Show next unacked if any
+  const nextUnacked = Object.values(requests).find(r => !r.acked && r.key !== latestUnackedKey);
+  if (nextUnacked) showAlert(nextUnacked.key);
+  latestUnackedKey = null;
+};
+
+function ackRequest(key) {
+  requests[key].acked = true;
+  update(ref(db, 'stopRequests/' + key), { acked: true });
+  renderAll();
+}
+
+window.clearAcked = () => {
+  Object.keys(requests).forEach(k => {
+    if (requests[k].acked) delete requests[k];
+  });
+  renderAll();
+};
+
+function formatTime(ts) {
+  if (!ts) return '';
+  const d = new Date(ts);
+  return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
+function renderAll() {
+  const queue = document.getElementById('queue');
+  const all = Object.values(requests).sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+  const pending = all.filter(r => !r.acked);
+  const acked = all.filter(r => r.acked);
+
+  document.getElementById('statPending').textContent = pending.length;
+  document.getElementById('statTotal').textContent = all.length;
+  document.getElementById('statAcked').textContent = acked.length;
+
+  if (!all.length) {
+    queue.innerHTML = '<div class="empty-queue">No stop requests yet.<br>Waiting for passengers...</div>';
+    return;
+  }
+
+  queue.innerHTML = '';
+  all.forEach(r => {
+    const div = document.createElement('div');
+    div.className = 'queue-item' + (r.acked ? ' acked' : ' new');
+    div.innerHTML = `
+      <div>
+        <div class="q-stop">${r.street}</div>
+        <div class="q-cross">at ${r.crossStreet}${r.municipality ? ' · ' + r.municipality : ''}${r.route ? ' · Route ' + r.route : ''}</div>
+      </div>
+      <div class="q-right">
+        <span class="q-id">#${r.stopId}</span>
+        <span class="q-time">${formatTime(r.timestamp)}</span>
+        ${!r.acked ? `<button class="q-ack" onclick="ackRequest('${r.key}')">Ack</button>` : ''}
+      </div>
+    `;
+    queue.appendChild(div);
+  });
+}
+
+window.ackRequest = ackRequest;
+</script>
+</body>
+</html>
