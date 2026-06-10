@@ -1,4 +1,3 @@
-//FIX API USAGE KEYS SINCE PUBLIC
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -241,10 +240,15 @@ const beep = () => {
   } catch(e) {}
 };
 
+const ONE_HOUR_MS = 60 * 60 * 1000;
+
 onChildAdded(ref(db, 'stopRequests'), snap => {
   const key = snap.key;
   const data = snap.val();
   if (requests[key]) return; // already have it
+
+  // Ignore anything older than 1 hour
+  if (data.timestamp && (Date.now() - data.timestamp) > ONE_HOUR_MS) return;
 
   requests[key] = { key, ...data, acked: data.acked || false };
   renderAll();
