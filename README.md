@@ -8,7 +8,7 @@ This is a work in progress and the approach may change as the project develops.
 
 ## The Problem
 
-A lot of GRT buses in Kitchener-Waterloo have unreliable stop-request buttons. The idea here is to give passengers a way to signal their stop from their phone, with the driver seeing the request on their end in real time.
+A lot of GRT buses in Kitchener-Waterloo have unreliable stop-request buttons. The idea here is to give passengers a way to signal their stop from their phone, with the driver seeing the request on their end in real time. This alongside the normal stop request buttons will help not only disabled passengers but passengers who require more assitance in thier day to day lives.
 
 ---
 
