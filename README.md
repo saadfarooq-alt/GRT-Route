@@ -18,7 +18,7 @@ A lot of GRT buses in Kitchener-Waterloo have unreliable stop-request buttons. T
 - Taps a button to request their stop
 - The request shows up on a driver-facing screen in real time
 
-The exact implementation is still being figured out this repo is for exploring the concept.
+The exact implementation is still being figured out, this repo is for exploring the concept.
 
 ---
 
