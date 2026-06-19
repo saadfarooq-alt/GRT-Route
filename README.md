@@ -33,7 +33,7 @@ One option that seems realistic for a prototype:
 | Notifications | Firebase Cloud Messaging |
 | Route data | GRT GTFS open data |
 
-This isn't set in stone the stack may change depending on what direction things go.
+This isn't set in stone the stack may change depending on what direction things go. Some possible edits are:
 
 ---
 
