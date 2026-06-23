@@ -28,7 +28,7 @@ One option that seems realistic for a prototype:
 
 | Layer | Option |
 |-------|--------|
-| Frontend | React or plain HTML/JS (PWA) |
+| Frontend | React or plain HTML/JS |
 | Real-time sync | Firebase Realtime Database |
 | Notifications | Firebase Cloud Messaging |
 | Route data | GRT GTFS open data |
