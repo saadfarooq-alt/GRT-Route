@@ -2,8 +2,6 @@
 
 A web app concept that lets passengers on Grand River Transit (GRT) buses digitally request a stop an alternative to the physical button when it's broken or unavailable.
 
-This is a work in progress and the approach may change as the project develops.
-
 ---
 
 ## The Problem
