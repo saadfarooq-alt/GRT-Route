@@ -47,6 +47,8 @@ Early stage / proof of concept. Nothing is finalized yet this is being built to 
 
 ## Notes
 
+FIX FIREBASE REBASE ISSUE 
+
 - No login or accounts planned
 - No personal data would be collected
 - Requests would be anonymous
