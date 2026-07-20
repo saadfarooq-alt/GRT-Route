@@ -31,6 +31,7 @@ One option that seems realistic for a prototype:
 | Notifications | Firebase Cloud Messaging |
 | Route data | GRT GTFS open data |
 
+*CURRENTLY FIREBASE IS DOWN FIX IMMEDIATELY
 ---
 
 ## Route Data
