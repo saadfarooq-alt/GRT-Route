@@ -1,6 +1,6 @@
 # GRT Stop Request App
 
-A web app concept that lets passengers on Grand River Transit (GRT) buses digitally request a stop an alternative to the physical button when it's broken or unavailable and just for ease for people during rush hours or for people planning trips.
+A web app concept that lets passengers on Grand River Transit (GRT) buses digitally request a stop an alternative to the physical button when it's broken or unavailable and just for ease for people during rush hours or for people planning trips. 
 
 ---
 
@@ -49,7 +49,7 @@ Early stage / proof of concept. Nothing is finalized yet this is being built to 
 ## Notes
 
 FIX FIREBASE REBASE ISSUE 
-
+CREATE SO IF IT SENSE YOU ARE NOT ON THE BUS OR NEAR THE AREA THAT YOU CANNOT SUBMIT A REQUEST TO AVOID OVERFLOW
 - No login or accounts planned
 - No personal data would be collected
 - Requests would be anonymous
