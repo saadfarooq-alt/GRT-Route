@@ -46,11 +46,12 @@ Early stage / proof of concept. Nothing is finalized yet this is being built to 
 
 ---
 
-## Notes
+## Notes AND IMPROVEMENTS
 
 FIX FIREBASE REBASE ISSUE 
 CREATE SO IF IT SENSE YOU ARE NOT ON THE BUS OR NEAR THE AREA THAT YOU CANNOT SUBMIT A REQUEST TO AVOID OVERFLOW
 MAYBE MCP SERVER + AGENTIC BEHAVIOUR FOR ESTIMATED ARRIVAL TIME/TIME TO LEAVE 
+REROUTE FIREBASE 
 
 - No login or accounts planned
 - No personal data would be collected
