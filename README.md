@@ -55,6 +55,7 @@ REROUTE FIREBASE
 CREATE IN MORE LOCAL AREA
 UPDATE
 CLEAR THE PUBLIC API CALL FOR SECURITY
+ADD END TO END SPACE
 
 - No login or accounts planned
 - No personal data would be collected
