@@ -57,6 +57,7 @@ UPDATE
 CLEAR THE PUBLIC API CALL FOR SECURITY
 ADD END TO END SPACE
 ADD SOME MORE SERVER CONTROL FOR HIGHER TRAFFIC
+Update project
 
 - No login or accounts planned
 - No personal data would be collected
